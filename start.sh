@@ -226,6 +226,7 @@ fi
 
 # interpolate variables correctly (e.g. postgres password etc.)
 source .env
+export POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 
 echo "Starting Docker services..."
 if ! $COMPOSE_CMD_WITH_OPTS up -d; then

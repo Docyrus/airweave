@@ -12,7 +12,8 @@ services:
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-airweave}
       POSTGRES_USER: ${POSTGRES_USER:-airweave}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-airweave1234!}
+      # run `docker compose exec -it postgres psql -U airweave` first time to change password again to fix password errors in backend
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     command:
       - "postgres"
       - "-c"

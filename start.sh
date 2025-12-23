@@ -225,8 +225,9 @@ else
 fi
 
 # interpolate variables correctly (e.g. postgres password etc.)
-source .env
-export POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+set -a            # auto-export all variables
+source .env       # load the file
+set +a            # stop auto-export
 
 echo "Starting Docker services..."
 if ! $COMPOSE_CMD_WITH_OPTS up -d; then

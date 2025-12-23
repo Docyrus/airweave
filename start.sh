@@ -224,6 +224,9 @@ else
     echo "Starting without frontend (backend-only mode)"
 fi
 
+# interpolate variables correctly (e.g. postgres password etc.)
+source .env
+
 echo "Starting Docker services..."
 if ! $COMPOSE_CMD_WITH_OPTS up -d; then
     echo "❌ Failed to start Docker services"

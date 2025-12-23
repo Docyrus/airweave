@@ -6,14 +6,11 @@ services:
   postgres:
     container_name: airweave-db
     image: postgres:17
-    env_file:
-      - ../.env
     # Uses variables from .env with fallbacks
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-airweave}
       POSTGRES_USER: ${POSTGRES_USER:-airweave}
-      # run `docker compose exec -it postgres psql -U airweave` first time to change password again to fix password errors in backend
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-airweave1234!}
     command:
       - "postgres"
       - "-c"
@@ -35,8 +32,6 @@ services:
   redis:
     container_name: airweave-redis
     image: redis:7-alpine
-    env_file:
-      - ../.env
     ports:
       - "6379:6379"
     volumes:
@@ -95,12 +90,10 @@ services:
     container_name: airweave-frontend
     # Use pre-built image of latest release, or override with FRONTEND_IMAGE env var for testing
     image: ${FRONTEND_IMAGE:-ghcr.io/airweave-ai/airweave-frontend:latest}
-    env_file:
-      - ../.env
     # Profile: only start if explicitly enabled with --profile frontend
     # Not needed for backend-only testing (API tests, connector tests)
-    #profiles:
-    #  - frontend
+    profiles:
+      - frontend
     ports:
       - "${FRONTEND_LOCAL_DEVELOPMENT_PORT:-8080}:8080"
     environment:
@@ -119,8 +112,6 @@ services:
   text2vec-transformers:
     container_name: airweave-embeddings
     image: semitechnologies/transformers-inference:sentence-transformers-all-MiniLM-L6-v2
-    env_file:
-      - ../.env
     # Profile: only start if explicitly enabled with --profile local-embeddings
     # By default, backend uses OpenAI embeddings when OPENAI_API_KEY is set
     profiles:
@@ -140,8 +131,6 @@ services:
   qdrant:
     container_name: airweave-qdrant
     image: qdrant/qdrant:latest
-    env_file:
-      - ../.env
     command: bash -c "apt-get update && apt-get install -y curl && ./entrypoint.sh" # we need to install curl to check health
     ports:
       - "6333:6333"
@@ -157,8 +146,6 @@ services:
   temporal:
     container_name: airweave-temporal
     image: temporalio/auto-setup:1.24.2
-    env_file:
-      - ../.env
     ports:
       - "7233:7233"
       - "8233:8233"
@@ -184,8 +171,6 @@ services:
   temporal-ui:
     container_name: airweave-temporal-ui
     image: temporalio/ui:2.26.2
-    env_file:
-      - ../.env
     ports:
       - "8088:8080"
     environment:

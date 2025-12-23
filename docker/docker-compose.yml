@@ -64,13 +64,13 @@ services:
       - TEXT2VEC_INFERENCE_URL=http://text2vec-transformers:8080
       # Environment configuration (can be overridden in .env)
       - ENVIRONMENT=${ENVIRONMENT:-local}
-      - LOCAL_DEVELOPMENT=${LOCAL_DEVELOPMENT:-true}
+      - LOCAL_DEVELOPMENT=${LOCAL_DEVELOPMENT:-false}
       # Temporal configuration
       - TEMPORAL_HOST=temporal
       - TEMPORAL_PORT=7233
       - TEMPORAL_NAMESPACE=default
       - TEMPORAL_ENABLED=true
-      - AUTH_ENABLED=false
+      - AUTH_ENABLED=${AUTH_ENABLED:-true}
     depends_on:
       postgres:
         condition: service_healthy
@@ -98,7 +98,7 @@ services:
       - "${FRONTEND_LOCAL_DEVELOPMENT_PORT:-8080}:8080"
     environment:
       - API_URL=${API_FULL_URL:-http://localhost:8001}
-      - ENABLE_AUTH=${FRONTEND_ENABLE_AUTH:-true}
+      - ENABLE_AUTH=${AUTH_ENABLED:-true}
     depends_on:
       backend:
         condition: service_healthy
